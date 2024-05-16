@@ -2,9 +2,9 @@ import React from "react";
 import SaltList from "./components/SaltList";
 function App() {
   return (
-    <div>
+    <main className="w-full h-full">
       <SaltList></SaltList>
-    </div>
+    </main>
   );
 }
 

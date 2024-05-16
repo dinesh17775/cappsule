@@ -3,12 +3,12 @@ import Salt from "./Salt";
 
 function MedList({ MedData }) {
   return (
-    <div>
+    <section className="max mx-auto">
       {MedData &&
         MedData.map((item) => {
           return <Salt saltForms={item} />;
         })}
-    </div>
+    </section>
   );
 }
 

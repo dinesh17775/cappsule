@@ -59,91 +59,89 @@ function Salt({ saltForms }) {
   }
 
   return (
-    <div>
-      <div>
-        <div>
-          <p>Form</p>
-          {saltForms &&
-            saltForms.available_forms.map((item) => {
-              return (
-                <div key={item}>
-                  <button
-                    onClick={handleItem}
-                    className="px-4 py-2 bg-slate-500 my-2"
-                  >
-                    {item}
-                  </button>
-                </div>
-              );
-            })}
-        </div>
-        <div>
-          <p>Strength</p>
-          <div>
-            {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
-              return (
-                <div key={key}>
-                  <p>{key === displayStrength && key}</p>
-                  {key === displayStrength &&
-                    Object.keys(value).map((innerKey) => (
-                      <div key={innerKey}>
-                        <button
-                          className="px-4 py-2 bg-slate-500 my-2"
-                          onClick={handlepacking}
-                        >
-                          {innerKey}
-                        </button>
-                      </div>
-                    ))}
-                </div>
-              );
-            })}
+    <div className="max mx-auto ">
+      <div className="w-3/4 border border-red-400 flex mx-auto justify-between items-center pl-[30px] py-7">
+        <div className="border border-green-400">
+          <div className="flex items-center">
+            <p>Form :</p>
+            {saltForms &&
+              saltForms.available_forms.map((item) => {
+                return (
+                  <div key={item} className="flex items-center">
+                    <button onClick={handleItem}>{item}</button>
+                  </div>
+                );
+              })}
+          </div>
+          <div className="flex items-center">
+            <p>Strength :</p>
+            <div>
+              {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
+                return (
+                  <div key={key} className="flex">
+                    {key === displayStrength &&
+                      Object.keys(value).map((innerKey) => (
+                        <div key={innerKey}>
+                          <button onClick={handlepacking}>{innerKey}</button>
+                        </div>
+                      ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="flex items-center">
+            <p>Packing :</p>
+            <div>
+              {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
+                return (
+                  <div key={key} className="">
+                    {key === displayStrength &&
+                      Object.entries(value).map(([innerkey, innervalue]) => (
+                        <div key={innerkey} className="flex">
+                          {innerkey === displayPacking &&
+                            Object.keys(innervalue).map((packingValue) => {
+                              return (
+                                <button
+                                  key={packingValue}
+                                  onClick={handlePricing}
+                                  id="pack"
+                                >
+                                  {packingValue}
+                                </button>
+                              );
+                            })}
+                        </div>
+                      ))}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
         <div>
-          <p>Packing</p>
-          <div>
-            {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
-              return (
-                <div key={key}>
-                  {key === displayStrength &&
-                    Object.entries(value).map(([innerkey, innervalue]) => (
-                      <div key={innerkey}>
-                        {innerkey === displayPacking &&
-                          Object.keys(innervalue).map((packingValue) => {
-                            return (
-                              <button
-                                key={packingValue}
-                                className="px-4 py-2 bg-slate-500 mx-2 my-2"
-                                onClick={handlePricing}
-                                id="pack"
-                              >
-                                {packingValue}
-                              </button>
-                            );
-                          })}
-                      </div>
-                    ))}
-                </div>
-              );
-            })}
+          <div className="flex flex-col border border-red-400 text-center">
+            <h2 className="font-semibold">{saltForms.salt}</h2>
+            <div className="flex my-2 border border-red-400 justify-center">
+              <p className="px-[2px] font-medium text-[#2a527a] text-xs">
+                {saltForms.most_common.Form}
+              </p>
+              <p className="px-[2px] font-medium text-[#2a527a] text-xs">
+                | {saltForms.most_common.Strength}
+              </p>
+              <p className="px-[2px] font-medium text-[#2a527a] text-xs">
+                | {saltForms.most_common.Packing}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
-      <div>
         <div>
-          <h2>{saltForms.salt}</h2>
-          <p>{saltForms.most_common.Form}</p>
-          <p>{saltForms.most_common.Strength}</p>
-          <p>{saltForms.most_common.Packing}</p>
+          {saltForms && pricing ? (
+            <h2>From:{pricing}</h2>
+          ) : (
+            <h2>No store is available</h2>
+          )}
         </div>
-      </div>
-      <div>
-        {saltForms && pricing ? (
-          <h2>From:{pricing}</h2>
-        ) : (
-          <h2>No store is available</h2>
-        )}
       </div>
     </div>
   );
