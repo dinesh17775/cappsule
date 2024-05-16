@@ -7,21 +7,27 @@ function Salt({ saltForms }) {
   const [displayPacking, setDisplayPacking] = useState(
     saltForms.most_common.Strength
   );
-  const [quantity, setquantity] = useState("");
-  const [pricing, setpricing] = useState(null);
+  const [quantity, setQuantity] = useState("");
+  const [pricing, setPricing] = useState(null);
+  const [showMore, setShowMore] = useState(4);
+  const [showStrengthMore, setShowStrengthMore] = useState(6);
+  const [showHide, setShowHide] = useState(false);
+  const [showStrengthHide, setShowStrengthHide] = useState(false);
+  const [showPackingMore, setShowPackingMore] = useState(6);
+  const [showPackingHide, setShowPackingHide] = useState(false);
 
   function handleItem(e) {
     setDisplayStrength(e.target.innerText);
   }
 
-  function handlepacking(e) {
+  function handlePacking(e) {
     setDisplayPacking(e.target.innerText);
   }
 
   function handlePricing(e) {
-    setpricing(null);
+    setPricing(null);
     const clickedQuantity = e.target.innerText; // Store the clicked quantity
-    setquantity(clickedQuantity); // Update the state with the clicked quantity
+    setQuantity(clickedQuantity); // Update the state with the clicked quantity
 
     let lowestPrice = null; // Initialize with null
 
@@ -52,42 +58,151 @@ function Salt({ saltForms }) {
     });
 
     if (lowestPrice !== null) {
-      setpricing(lowestPrice);
+      setPricing(lowestPrice);
     } else {
       console.log("No valid price found");
     }
   }
-
   return (
-    <div className="max mx-auto ">
-      <div className="w-3/4 border border-red-400 flex mx-auto justify-between items-center pl-[30px] py-7">
+    <div className="max mx-auto">
+      <div className="w-3/4 border border-red-400 flex mx-auto justify-between items-center pl-[20px] py-5">
         <div className="border border-green-400">
           <div className="flex items-center">
             <p>Form :</p>
-            {saltForms &&
-              saltForms.available_forms.map((item) => {
-                return (
-                  <div key={item} className="flex items-center">
-                    <button onClick={handleItem}>{item}</button>
-                  </div>
-                );
-              })}
+            <div className="grid grid-cols-2 gap-2">
+              {saltForms &&
+                saltForms.available_forms &&
+                saltForms.available_forms.slice(0, showMore).map((item) => {
+                  return (
+                    <div
+                      key={item}
+                      className="flex items-center border border-red-500"
+                    >
+                      <button
+                        onClick={handleItem}
+                        className="px-[10px] py-[3px] my-1 border border-[#112D31] rounded-lg text-xs"
+                      >
+                        {item}
+                      </button>
+                    </div>
+                  );
+                })}
+              <div>
+                <button
+                  type="button"
+                  className={`${!showHide ? "block" : "hidden"} ${
+                    saltForms &&
+                    saltForms.available_forms &&
+                    saltForms.available_forms.length >= 4
+                      ? "block"
+                      : " hidden"
+                  } `}
+                  onClick={() => {
+                    setShowMore(
+                      saltForms && saltForms.available_forms
+                        ? saltForms.available_forms.length
+                        : 0
+                    );
+                    setShowHide(!showHide);
+                  }}
+                >
+                  More
+                </button>
+                <button
+                  type="button"
+                  className={` ${
+                    saltForms &&
+                    saltForms.available_forms &&
+                    saltForms.available_forms.length >= 4 &&
+                    showHide
+                      ? "block"
+                      : " hidden"
+                  }`}
+                  onClick={() => {
+                    setShowMore(4);
+                    setShowHide(!showHide);
+                  }}
+                >
+                  hide
+                </button>
+              </div>
+            </div>
           </div>
           <div className="flex items-center">
             <p>Strength :</p>
             <div>
               {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
                 return (
-                  <div key={key} className="flex">
-                    {key === displayStrength &&
-                      Object.keys(value).map((innerKey) => (
-                        <div key={innerKey}>
-                          <button onClick={handlepacking}>{innerKey}</button>
-                        </div>
-                      ))}
-                  </div>
+                  <>
+                    <div
+                      key={key}
+                      className="grid grid-cols-3  gap-2"
+                      id="strength"
+                    >
+                      {key === displayStrength &&
+                        Object.keys(value)
+                          .slice(0, showStrengthMore)
+                          .map((innerKey) => (
+                            <div key={innerKey}>
+                              <button
+                                onClick={handlePacking}
+                                className="px-[10px] py-[3px] mx-1 border border-[#112D31] rounded-lg text-xs"
+                              >
+                                {innerKey}
+                              </button>
+                            </div>
+                          ))}
+                    </div>
+                  </>
                 );
               })}
+              <div>
+                <button
+                  type="button"
+                  className={`${!showStrengthHide ? "block" : "hidden"} ${
+                    saltForms &&
+                    saltForms.salt_forms_json &&
+                    saltForms.salt_forms_json[displayStrength] &&
+                    Object.keys(saltForms.salt_forms_json[displayStrength])
+                      .length >= 6
+                      ? "block"
+                      : "hidden"
+                  }`}
+                  onClick={() => {
+                    setShowStrengthMore(
+                      saltForms &&
+                        saltForms.salt_forms_json &&
+                        saltForms.salt_forms_json[displayStrength]
+                        ? Object.keys(
+                            saltForms.salt_forms_json[displayStrength]
+                          ).length
+                        : 0
+                    );
+                    setShowStrengthHide(!showStrengthHide);
+                  }}
+                >
+                  More
+                </button>
+                <button
+                  type="button"
+                  className={`${
+                    saltForms &&
+                    saltForms.salt_forms_json &&
+                    saltForms.salt_forms_json[displayStrength] &&
+                    Object.keys(saltForms.salt_forms_json[displayStrength])
+                      .length >= 6 &&
+                    showStrengthHide
+                      ? "block"
+                      : "hidden"
+                  }`}
+                  onClick={() => {
+                    setShowStrengthMore(6);
+                    setShowStrengthHide(!showStrengthHide);
+                  }}
+                >
+                  Hide
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex items-center">
@@ -95,27 +210,90 @@ function Salt({ saltForms }) {
             <div>
               {Object.entries(saltForms.salt_forms_json).map(([key, value]) => {
                 return (
-                  <div key={key} className="">
+                  <div key={key}>
                     {key === displayStrength &&
                       Object.entries(value).map(([innerkey, innervalue]) => (
-                        <div key={innerkey} className="flex">
+                        <div key={innerkey} className="grid grid-cols-3">
                           {innerkey === displayPacking &&
-                            Object.keys(innervalue).map((packingValue) => {
-                              return (
-                                <button
-                                  key={packingValue}
-                                  onClick={handlePricing}
-                                  id="pack"
-                                >
-                                  {packingValue}
-                                </button>
-                              );
-                            })}
+                            Object.keys(innervalue)
+                              .slice(0, showPackingMore)
+                              .map((packingValue) => {
+                                return (
+                                  <button
+                                    key={packingValue}
+                                    onClick={handlePricing}
+                                    id="pack"
+                                    className="px-[10px] py-[3px] mx-1 border border-[#112D31] rounded-lg text-xs my-1"
+                                  >
+                                    {packingValue}
+                                  </button>
+                                );
+                              })}
                         </div>
                       ))}
                   </div>
                 );
               })}
+              <div>
+                <button
+                  type="button"
+                  className={`${!showPackingHide ? "block" : "hidden"} ${
+                    saltForms &&
+                    saltForms.salt_forms_json &&
+                    saltForms.salt_forms_json[displayStrength] &&
+                    saltForms.salt_forms_json[displayStrength][
+                      displayPacking
+                    ] &&
+                    Object.keys(
+                      saltForms.salt_forms_json[displayStrength][displayPacking]
+                    ).length > 6
+                      ? "block"
+                      : "hidden"
+                  }`}
+                  onClick={() => {
+                    setShowPackingMore(
+                      saltForms &&
+                        saltForms.salt_forms_json &&
+                        saltForms.salt_forms_json[displayStrength] &&
+                        saltForms.salt_forms_json[displayStrength][
+                          displayPacking
+                        ]
+                        ? Object.keys(
+                            saltForms.salt_forms_json[displayStrength][
+                              displayPacking
+                            ]
+                          ).length
+                        : 0
+                    );
+                    setShowPackingHide(!showPackingHide);
+                  }}
+                >
+                  More
+                </button>
+                <button
+                  type="button"
+                  className={`${
+                    saltForms &&
+                    saltForms.salt_forms_json &&
+                    saltForms.salt_forms_json[displayStrength] &&
+                    saltForms.salt_forms_json[displayStrength][
+                      displayPacking
+                    ] &&
+                    Object.keys(
+                      saltForms.salt_forms_json[displayStrength][displayPacking]
+                    ).length > 6 &&
+                    showPackingHide
+                      ? "block"
+                      : "hidden"
+                  }`}
+                  onClick={() => {
+                    setShowPackingMore(6);
+                    setShowPackingHide(!showPackingHide);
+                  }}
+                >
+                  Hide
+                </button>
+              </div>
             </div>
           </div>
         </div>
