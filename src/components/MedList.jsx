@@ -1,12 +1,12 @@
 import React from "react";
-import Salt from "./Salt";
+import SaltPage from "./SaltPage";
 
 function MedList({ MedData }) {
   return (
     <section className="max mx-auto">
       {MedData &&
         MedData.map((item) => {
-          return <Salt saltForms={item} />;
+          return <SaltPage saltForms={item} key={item.id} />;
         })}
     </section>
   );
